@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
+using UnityEngine.Events;
 
 [Serializable]
 public struct Evidence
@@ -22,6 +23,7 @@ public class GameManager : MonoBehaviour
     static List<Evidence> evidenceList = new List<Evidence>();
     static float GameTime = 0;
     public float InvestigationTime = 120;
+    public static UnityEvent<bool> DeactivatePlayer = new UnityEvent<bool>();
 
     private void Awake()
     {

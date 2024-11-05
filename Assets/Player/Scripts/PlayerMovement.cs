@@ -12,11 +12,13 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] Transform orientation;
     [SerializeField] Transform Body;
     bool playerIsBusy = false;
+    Vector3 savedLocation;
 
     private void Awake()
     {
         DialogueManager.NewDialogueDisplayed.AddListener(OnDialogueStarted);
         DialogueManager.DialogueEnded.AddListener(OnDialogueEnded);
+        GameManager.DeactivatePlayer.AddListener(OnPlayerDeactivation);
     }
 
     void OnDialogueStarted()
@@ -26,6 +28,22 @@ public class PlayerMovement : MonoBehaviour
     void OnDialogueEnded()
     {
         playerIsBusy = false;
+    }
+    void OnPlayerDeactivation(bool ActivatePlayer)
+    {
+        if (ActivatePlayer)
+        {
+            Body.gameObject.SetActive(false);
+            savedLocation = transform.position;
+            transform.position = Vector3.down * 100;
+            playerIsBusy = true;
+        }
+        else
+        {
+            Body.gameObject.SetActive(true);
+            transform.position = savedLocation;
+            playerIsBusy = false;
+        }
     }
 
     private void Update()
