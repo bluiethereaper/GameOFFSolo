@@ -20,42 +20,75 @@ public struct Alibi
 
 public class GameManager : MonoBehaviour
 {
-    static List<Evidence> evidenceList = new List<Evidence>();
-    static float GameTime = 0;
+    static List<Evidence> _evidenceList = new List<Evidence>();
+    static float _gameTime = 0;
+    static int _Day = 0;
     public float InvestigationTime = 120;
-    public static UnityEvent<bool> DeactivatePlayer = new UnityEvent<bool>();
+    public string CriminalName = "Bob";
+    static string _criminalName;
+    public static UnityEvent<bool> _deactivatePlayer = new UnityEvent<bool>();
+    public static UnityEvent<int> _OnNewDay = new UnityEvent<int>();
 
     private void Awake()
     {
         StartInvestigation(InvestigationTime);
+        _criminalName = CriminalName.ToLower();
     }
 
     private void Update()
     {
-        GameTime -= Time.deltaTime;
+        _gameTime -= Time.deltaTime;
     }
 
     public static void AddEvidence(Evidence evidence)
     {
-        evidenceList.Add(evidence);
+        _evidenceList.Add(evidence);
     }
     public static Evidence[] GetEvidence()
     {
-        return evidenceList.ToArray();
+        return _evidenceList.ToArray();
     }
 
     public static int GetTimeAsHours()
     {
-        return (int)GameTime / 60;
+        return (int)_gameTime / 60;
     }
 
     public static int GetTimeAsMin()
     {
-        return (int)GameTime % 60;
+        return (int)_gameTime % 60;
+    }
+
+    public static int GetDay()
+    {
+        return _Day;
     }
 
     public static void StartInvestigation(float Length)
     {
-        GameTime = Length;
+        _Day++;
+        _OnNewDay.Invoke(_Day);
+        _gameTime = Length;
+    }
+
+    static bool CheckForCriminal(string suspect)
+    {
+        suspect = suspect.ToLower();
+
+        return suspect.Equals(_criminalName);
+    }
+
+    public static void ArrestSuspect(string suspect)
+    {
+        if (CheckForCriminal(suspect))
+        {
+            //if this is the correct suspect the player wins
+            print("YOU WIN!");
+        }
+        else
+        {
+            print("You Lose");
+        }
+
     }
 }

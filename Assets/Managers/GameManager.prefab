@@ -46,6 +46,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   InvestigationTime: 120
+  CriminalName: Bob
 --- !u!114 &2879897644301234937
 MonoBehaviour:
   m_ObjectHideFlags: 0

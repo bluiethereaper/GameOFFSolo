@@ -18,7 +18,7 @@ public class PlayerMovement : MonoBehaviour
     {
         DialogueManager.NewDialogueDisplayed.AddListener(OnDialogueStarted);
         DialogueManager.DialogueEnded.AddListener(OnDialogueEnded);
-        GameManager.DeactivatePlayer.AddListener(OnPlayerDeactivation);
+        GameManager._deactivatePlayer.AddListener(OnPlayerDeactivation);
     }
 
     void OnDialogueStarted()
@@ -64,6 +64,6 @@ public class PlayerMovement : MonoBehaviour
         //See if there is any Input to mouse
         float mouse = Input.GetAxisRaw("Mouse X");
         orientation.eulerAngles += Vector3.up * mouse * CamSpeed * Time.deltaTime;
-
+        
     }
 }

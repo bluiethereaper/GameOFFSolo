@@ -50,6 +50,7 @@ public class DialogueManager : MonoBehaviour
 
     private void Update()
     {
+        //when there is no current dialogue and some is added to que display it
         if (dialogueQue.Count > 0 && !DialogueIsBeingDisplayed)
         {
             currentDialog = dialogueQue[0];

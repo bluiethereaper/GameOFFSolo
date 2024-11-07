@@ -17,7 +17,9 @@ public class BookCase : MonoBehaviour, Interactables
     [SerializeField] Transform MoveTransform;
     [SerializeField] float MoveTime = 5;
     Vector3 originalLoc;
+    Vector3 originalRot;
     Vector3 moveLoc;
+    Vector3 moveRot;
     bool movingCase = false;
     float MoveAlpha = 0;
 
@@ -26,6 +28,8 @@ public class BookCase : MonoBehaviour, Interactables
         CamLoc = CamHolder.position;
         originalLoc = transform.position;
         moveLoc = MoveTransform.position;
+        originalRot = transform.eulerAngles;
+        moveRot = MoveTransform.eulerAngles;
     }
 
     private void Update()
@@ -37,6 +41,7 @@ public class BookCase : MonoBehaviour, Interactables
             MoveAlpha = Mathf.Clamp(MoveAlpha, 0, MoveTime);
             float currentAlpha = MoveAlpha / MoveTime;
             transform.position = Vector3.Lerp(originalLoc, moveLoc, currentAlpha);
+            transform.eulerAngles = Vector3.Lerp(originalRot, moveRot, currentAlpha);
         }
         if (!movingCase && MoveAlpha > 0)
         {
@@ -44,6 +49,7 @@ public class BookCase : MonoBehaviour, Interactables
             MoveAlpha = Mathf.Clamp(MoveAlpha, 0, MoveTime);
             float currentAlpha = MoveAlpha / MoveTime;
             transform.position = Vector3.Lerp(originalLoc, moveLoc, currentAlpha);
+            transform.eulerAngles = Vector3.Lerp(originalRot, moveRot, currentAlpha);
         }
 
 
@@ -85,14 +91,14 @@ public class BookCase : MonoBehaviour, Interactables
         inUse = true;
         CamHolder.gameObject.SetActive(true);
         Cursor.lockState = CursorLockMode.Confined;
-        GameManager.DeactivatePlayer.Invoke(true);
+        GameManager._deactivatePlayer.Invoke(true);
     }
 
     public void Exit()
     {
         inUse = false;
         CamHolder.gameObject.SetActive(false);
-        GameManager.DeactivatePlayer.Invoke(false);
+        GameManager._deactivatePlayer.Invoke(false);
         Cursor.lockState = CursorLockMode.Locked;
     }
 
