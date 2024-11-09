@@ -11,7 +11,6 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float TurnSpeed = 10;
     [SerializeField] Transform orientation;
     [SerializeField] Transform Body;
-    bool playerIsBusy = false;
     Vector3 savedLocation;
 
     private void Awake()
@@ -23,11 +22,11 @@ public class PlayerMovement : MonoBehaviour
 
     void OnDialogueStarted()
     {
-        playerIsBusy = true;
+        GameManager.playerIsBusy = true;
     }
     void OnDialogueEnded()
     {
-        playerIsBusy = false;
+        GameManager.playerIsBusy = false;
     }
     void OnPlayerDeactivation(bool ActivatePlayer)
     {
@@ -36,19 +35,19 @@ public class PlayerMovement : MonoBehaviour
             Body.gameObject.SetActive(false);
             savedLocation = transform.position;
             transform.position = Vector3.down * 100;
-            playerIsBusy = true;
+            GameManager.playerIsBusy = true;
         }
         else
         {
             Body.gameObject.SetActive(true);
             transform.position = savedLocation;
-            playerIsBusy = false;
+            GameManager.playerIsBusy = false;
         }
     }
 
     private void Update()
     {
-        if (!playerIsBusy)
+        if (!GameManager.playerIsBusy && !GameManager.isMenuOpen)
         {
             xInput = Input.GetAxisRaw("Horizontal");
             yInput = Input.GetAxisRaw("Vertical");
@@ -61,9 +60,12 @@ public class PlayerMovement : MonoBehaviour
             
         }
 
-        //See if there is any Input to mouse
-        float mouse = Input.GetAxisRaw("Mouse X");
-        orientation.eulerAngles += Vector3.up * mouse * CamSpeed * Time.deltaTime;
+        if (!GameManager.isMenuOpen)
+        {
+            //See if there is any Input to mouse
+            float mouse = Input.GetAxisRaw("Mouse X");
+            orientation.eulerAngles += Vector3.up * mouse * CamSpeed * Time.deltaTime;
+        }
         
     }
 }

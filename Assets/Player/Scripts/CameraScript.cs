@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering.PostProcessing;
 
 public class CameraScript : MonoBehaviour
 {
@@ -9,11 +10,13 @@ public class CameraScript : MonoBehaviour
     [SerializeField] float maxZoomDistance = 30;
     [SerializeField] float minZoomDistance = 3;
     float currentZoom;
+    [SerializeField] PostProcessVolume ppv;
 
     private void Awake()
     {
         Cursor.lockState = CursorLockMode.Locked;
         currentZoom = -cameraLoc.position.z;
+        GameManager._OpenEvidenceLocker.AddListener(TogglePostProcess);
     }
 
     private void Update()
@@ -41,5 +44,10 @@ public class CameraScript : MonoBehaviour
         currentZoom -= Input.mouseScrollDelta.y;
         currentZoom = Mathf.Clamp(currentZoom, minZoomDistance, maxZoomDistance);
         cameraLoc.localPosition = Vector3.forward * -currentZoom;
+    }
+
+    void TogglePostProcess()
+    {
+        ppv.enabled = !ppv.enabled;
     }
 }

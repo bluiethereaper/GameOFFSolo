@@ -10,6 +10,7 @@ public struct Evidence
 {
     public string Name;
     public string Desc;
+    public Sprite image;
 }
 
 public struct Alibi
@@ -28,7 +29,11 @@ public class GameManager : MonoBehaviour
     static string _criminalName;
     public static UnityEvent<bool> _deactivatePlayer = new UnityEvent<bool>();
     public static UnityEvent<int> _OnNewDay = new UnityEvent<int>();
-
+    public static UnityEvent _OpenEvidenceLocker =  new UnityEvent();
+    public static bool isMenuOpen = false;
+    public static bool playerIsBusy = false;
+    public static UnityEvent _UpdateEvidence = new UnityEvent();
+    public static UnityEvent<string> _ShowNotification = new UnityEvent<string>();
     private void Awake()
     {
         StartInvestigation(InvestigationTime);
@@ -37,12 +42,24 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        _gameTime -= Time.deltaTime;
+        if (!isMenuOpen)
+        {
+            _gameTime -= Time.deltaTime;
+        }
+        
+
+        if (Input.GetKeyDown(KeyCode.Tab) && !playerIsBusy)
+        {
+            isMenuOpen = !isMenuOpen;
+            _OpenEvidenceLocker.Invoke();
+        }
     }
 
     public static void AddEvidence(Evidence evidence)
     {
         _evidenceList.Add(evidence);
+        _UpdateEvidence.Invoke();
+        _ShowNotification.Invoke(evidence.Name + " Found!");
     }
     public static Evidence[] GetEvidence()
     {

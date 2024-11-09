@@ -14,7 +14,9 @@ public class PlayerInteract : MonoBehaviour
 
     private void Update()
     {
-        
+        if (GameManager.isMenuOpen) return;
+
+
         //when player presses the interact Button do an interaction
         if (Input.GetKeyDown(KeyCode.E) && currentInteractable != null)
             currentInteractable.Interact();
